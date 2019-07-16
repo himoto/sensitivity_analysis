@@ -1,7 +1,7 @@
 # Sensitivity Analysis
 Sensitivity analysis examines how perturbations to the processes in the model affect the output.
 ***
-![sensitivity](https://user-images.githubusercontent.com/31299606/60384344-6a064800-9ab7-11e9-9956-75824cc58b18.png)
+![sensitivity](https://user-images.githubusercontent.com/31299606/61289195-c2ea1600-a803-11e9-9b14-3ed4d95d74fb.png)
 
 Control coefficients for *c-fos* mRNA duration and integrated pc-Fos are shown by bars (blue, EGF; red, HRG).
 
@@ -12,8 +12,16 @@ The single parameter sensitivity of each reaction is defined by<br>
 
 where *v<sub>i</sub>* is the *i*<sup>th</sup> reaction rate, **v** is reaction vector **v** = (*v<sub>1</sub>*, *v<sub>2</sub>*, ...) and *q*(**v**) is a target function, e.g., time-integrated response, duration. Sensitivity coefficients were calculated using finite difference approximations with 1% changes in the reaction rates.
 
+## Requirements
+- **Python3+**
+    - numpy
+    - scipy
+    - matplotlib
+    - jupyter
+
 ## Usage
 ```python
+%matplotlib inline
 import sensitivity_analysis as sa
 sa.barplot()
 ```
