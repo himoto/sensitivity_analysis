@@ -9,6 +9,8 @@ def barplot():
     plt.figure(figsize=(12,10))
     plt.rcParams['font.size'] = 15
     plt.rcParams['font.family'] = 'Arial'
+    plt.rcParams['mathtext.fontset'] = 'custom'
+    plt.rcParams['mathtext.it'] = 'Arial:italic'
     plt.rcParams['axes.linewidth'] = 1
 
     len_v = 57 # Num. of Rate Equations
