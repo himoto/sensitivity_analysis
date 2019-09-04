@@ -70,4 +70,4 @@ def barplot():
     plt.ylim(-3,2)
     plt.legend(loc='lower right',frameon=False)
 
-    plt.show()
+    plt.savefig('sensitivities.png',dpi=600,bbox_inches='tight')
