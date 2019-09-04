@@ -1,7 +1,7 @@
 # Sensitivity Analysis
 Sensitivity analysis examines how perturbations to the processes in the model affect the output.
 ***
-![sensitivity](https://user-images.githubusercontent.com/31299606/61289195-c2ea1600-a803-11e9-9b14-3ed4d95d74fb.png)
+![sensitivities](sensitivities.png)
 
 Control coefficients for *c-fos* mRNA duration and integrated pc-Fos are shown by bars (blue, EGF; red, HRG).
 
