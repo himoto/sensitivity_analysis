@@ -24,8 +24,8 @@ def sensitivity_analysis_integral():
     integ_PcFos = np.empty((condition,len_v))
 
     for j in range(len_v):
-        de.w = [1]*len_v
-        de.w[j] = rate
+        de.perturbation = [1]*len_v
+        de.perturbation[j] = rate
 
         for i in range(condition):
             if i==0:

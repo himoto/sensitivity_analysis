@@ -2,7 +2,7 @@ from .name2idx import f_parameter as C
 from .name2idx import f_variable as V
 
 def diffeq(t,y,x):
-    global w
+    global perturbation
     # Rate Equations for the Empirical Model of MEK Activation.
     v0 = [0]*16
 
@@ -83,7 +83,7 @@ def diffeq(t,y,x):
     v[56] = x[C.p56] * y[V.pDUSPn] * y[V.ERKn] - x[C.m56] * y[V.pDUSPn_ERKn]
 
     for i in range(len(v)):
-        v[i] = v[i]*w[i]
+        v[i] = v[i]*perturbation[i]
 
 
     dydt = [0]*V.len_f_vars
