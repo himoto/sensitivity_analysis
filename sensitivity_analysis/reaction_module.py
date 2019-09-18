@@ -54,11 +54,11 @@ def set_reaction_module(len_v,width):
 
     sort_idx = [0]*len_v
     nth_module = 0
-    for i in range(len(reaction_module)):
-        for j in range(len(reaction_module[i])):
+    for i in range(n_module):
+        for j,k in enumerate(reaction_module[i]):
             if i!=0 and j==0:
                 nth_module += len(reaction_module[i-1])
-            sort_idx[nth_module+j] = reaction_module[i][j]
+            sort_idx[nth_module+j] = k
 
     reaction_number = [str(i) for i in sort_idx]
 
