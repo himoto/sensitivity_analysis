@@ -27,7 +27,7 @@ sa.barplot()
 ```
 
 ## Installation
-    $ git clone https://github.com/himoto/sensitivity_analysis.git
+    $ git clone https://github.com/okadalabipr/sensitivity_analysis.git
 
 ## References
 - Nakakuki, T. *et al.* Ligand-specific c-Fos expression emerges from the spatiotemporal control of ErbB network dynamics. *Cell* **141**, 884–896 (2010). https://doi.org/10.1016/j.cell.2010.03.054
