@@ -26,15 +26,16 @@ def barplot():
     plt.bar(np.arange(len_v)+width,s_cFosmRNA[1,sort_idx],
             width=width,color='r',align='center',label='HRG')
 
-    for i in range(len_v-1):
-        xp = range(len_v-1)[i]+width/2
-        yp = s_cFosmRNA[np.argmax(np.abs(s_cFosmRNA[:,sort_idx[i]])),sort_idx[i]]
-        if yp > 0:
-            plt.text(xp,yp+0.05,reaction_number[i],
-                     ha='center', va='bottom', fontsize=10, rotation=90)
-        else:
-            plt.text(xp,yp-0.05,reaction_number[i],
-                     ha='center', va='top', fontsize=10, rotation=90)
+    for i,j in enumerate(sort_idx):
+        if j != 0:
+            xp = i + width/2
+            yp = s_cFosmRNA[np.argmax(np.abs(s_cFosmRNA[:,j])),j]
+            if yp > 0:
+                plt.text(xp,yp+0.05,reaction_number[i],
+                        ha='center', va='bottom', fontsize=10, rotation=90)
+            else:
+                plt.text(xp,yp-0.05,reaction_number[i],
+                        ha='center', va='top', fontsize=10, rotation=90)
 
     plt.xticks([])
     plt.ylabel('Control coefficients on\nduration ('+r'$\it{c}$'+'-'+r'$\it{fos}$'+' mRNA)')
@@ -54,15 +55,16 @@ def barplot():
     plt.bar(np.arange(len_v)+width,s_PcFos[1,sort_idx],
             width=width,color='r',align='center',label='HRG')
 
-    for i in range(len_v-1):
-        xp = range(len_v-1)[i]+width/2
-        yp = s_PcFos[np.argmax(np.abs(s_PcFos[:,sort_idx[i]])),sort_idx[i]]
-        if yp > 0:
-            plt.text(xp,yp+0.1,reaction_number[i],
-                     ha='center', va='bottom', fontsize=10, rotation=90)
-        else:
-            plt.text(xp,yp-0.1,reaction_number[i],
-                     ha='center', va='top', fontsize=10, rotation=90)
+    for i,j in enumerate(sort_idx):
+        if j != 0:
+            xp = i + width/2
+            yp = s_PcFos[np.argmax(np.abs(s_PcFos[:,j])),j]
+            if yp > 0:
+                plt.text(xp,yp+0.1,reaction_number[i],
+                        ha='center', va='bottom', fontsize=10, rotation=90)
+            else:
+                plt.text(xp,yp-0.1,reaction_number[i],
+                        ha='center', va='top', fontsize=10, rotation=90)
 
     plt.xticks([])
     plt.ylabel('Control coefficients on\nintegrated response (pc-Fos)')
