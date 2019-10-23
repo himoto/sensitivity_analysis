@@ -1,7 +1,8 @@
 # Sensitivity Analysis
 Sensitivity analysis examines how perturbations to the processes in the model affect the output.
 ***
-![sensitivities](sensitivities.png)
+![sensitivity_cFosmRNA](images/sensitivity_cFosmRNA.png)
+![sensitivity_PcFos](images/sensitivity_PcFos.png)
 
 Control coefficients for *c-fos* mRNA duration and integrated pc-Fos are shown by bars (blue, EGF; red, HRG).
 
@@ -21,9 +22,9 @@ where *v<sub>i</sub>* is the *i*<sup>th</sup> reaction rate, **v** is reaction v
 
 ## Usage
 ```python
-%matplotlib inline
-import sensitivity_analysis as sa
-sa.barplot()
+from sensitivity_analysis import visualize_sensitivity
+
+visualize_sensitivity()
 ```
 
 ## Installation

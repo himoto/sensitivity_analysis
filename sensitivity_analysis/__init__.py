@@ -1,1 +1,1 @@
-from .plot import visualize_sensitibity
+from .plot import visualize_sensitivity
