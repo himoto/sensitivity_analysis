@@ -2,11 +2,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from .reaction_module import set_reaction_module
-from .duration import sensitivity_analysis_duration
-from .integral import sensitivity_analysis_integral
+from .sensitivity import analyze_sensitivity
 
-def barplot():
-    plt.figure(figsize=(12,10))
+def visualize_sensitivity():
+    plt.figure(figsize=(12,5))
     plt.rcParams['font.size'] = 15
     plt.rcParams['font.family'] = 'Arial'
     plt.rcParams['mathtext.fontset'] = 'custom'
@@ -15,10 +14,8 @@ def barplot():
 
     len_v = 57 # Num. of Rate Equations
     width = 0.3
-
-    plt.subplot(2,1,1)
-    s_cFosmRNA = sensitivity_analysis_duration()
-
+    
+    (s_cFosmRNA, s_PcFos) = analyze_sensitivity()
     sort_idx, reaction_number = set_reaction_module(len_v,width)
 
     plt.bar(np.arange(len_v),s_cFosmRNA[0,sort_idx],
@@ -43,11 +40,18 @@ def barplot():
     plt.ylim(-1.2,0.6)
     plt.yticks([-1.2,-1.0,-0.8,-0.6,-0.4,-0.2,0,0.2,0.4,0.6])
     plt.legend(loc='lower right',frameon=False)
+    plt.savefig('sensitivity_cFosmRNA.png',dpi=300,bbox_inches='tight')
+    plt.close()
 
+    # ==========================================================================
 
-    plt.subplot(2,1,2)
-    s_PcFos = sensitivity_analysis_integral()
-
+    plt.figure(figsize=(12,5))
+    plt.rcParams['font.size'] = 15
+    plt.rcParams['font.family'] = 'Arial'
+    plt.rcParams['mathtext.fontset'] = 'custom'
+    plt.rcParams['mathtext.it'] = 'Arial:italic'
+    plt.rcParams['axes.linewidth'] = 1
+    
     sort_idx, reaction_number = set_reaction_module(len_v,width)
 
     plt.bar(np.arange(len_v),s_PcFos[0,sort_idx],
@@ -72,4 +76,5 @@ def barplot():
     plt.ylim(-3,2)
     plt.legend(loc='lower right',frameon=False)
 
-    plt.savefig('sensitivities.png',dpi=600,bbox_inches='tight')
+    plt.savefig('sensitivity_PcFos.png',dpi=300,bbox_inches='tight')
+    plt.close()

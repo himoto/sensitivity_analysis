@@ -1,1 +1,1 @@
-from .plot_func import barplot
+from .plot import visualize_sensitibity
