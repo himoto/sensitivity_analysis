@@ -1,5 +1,3 @@
-from matplotlib import pyplot as plt
-
 def set_reaction_module():
 
     n_module = 15
