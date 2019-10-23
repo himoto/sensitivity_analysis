@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 
-def set_reaction_module(len_v,width):
+def set_reaction_module():
 
     n_module = 15
     reaction_module = [None]*n_module
@@ -50,28 +50,5 @@ def set_reaction_module(len_v,width):
     # cFos_degradation
     reaction_module[14] = [38,39,45,46]
 
-    # ==========================================================================
 
-    sort_idx = [0]*len_v
-    nth_module = 0
-    for i in range(n_module):
-        for j,k in enumerate(reaction_module[i]):
-            if i!=0 and j==0:
-                nth_module += len(reaction_module[i-1])
-            sort_idx[nth_module+j] = k
-
-    reaction_number = [str(i) for i in sort_idx]
-
-    # Draw a vertical span
-    nth_module = 0
-    for i in range(n_module):
-        if i%2 == 0:
-            plt.axvspan(
-                nth_module-width,
-                nth_module+len(reaction_module[i])-width,
-                facecolor='k',alpha=0.1
-            )
-        nth_module += len(reaction_module[i])
-    ###
-
-    return sort_idx, reaction_number
+    return reaction_module

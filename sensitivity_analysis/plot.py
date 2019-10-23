@@ -4,7 +4,37 @@ from matplotlib import pyplot as plt
 from .reaction_module import set_reaction_module
 from .sensitivity import analyze_sensitivity
 
+def draw_vertical_span(reaction_module,len_v,width):
+    left_end = 0
+    for i,nth_module in enumerate(reaction_module):
+        if i%2 == 0:
+            plt.axvspan(
+                left_end-width,
+                left_end+len(nth_module)-width,
+                facecolor='k',alpha=0.1
+            )
+        left_end += len(nth_module)
+    ###
+
 def visualize_sensitivity():
+    len_v = 57 # Num. of Rate Equations
+    width = 0.3
+    
+    (s_cFosmRNA, s_PcFos) = analyze_sensitivity()
+    reaction_module = set_reaction_module()
+    
+    sort_idx = [0]*len_v
+    left_end = 0
+    for i,nth_module in enumerate(reaction_module):
+        for j,k in enumerate(nth_module):
+            if i!=0 and j==0:
+                left_end += len(reaction_module[i-1])
+            sort_idx[left_end+j] = k
+
+    reaction_number = [str(i) for i in sort_idx]
+    
+    # ==========================================================================
+    
     plt.figure(figsize=(12,5))
     plt.rcParams['font.size'] = 15
     plt.rcParams['font.family'] = 'Arial'
@@ -12,12 +42,7 @@ def visualize_sensitivity():
     plt.rcParams['mathtext.it'] = 'Arial:italic'
     plt.rcParams['axes.linewidth'] = 1
 
-    len_v = 57 # Num. of Rate Equations
-    width = 0.3
-    
-    (s_cFosmRNA, s_PcFos) = analyze_sensitivity()
-    sort_idx, reaction_number = set_reaction_module(len_v,width)
-
+    draw_vertical_span(reaction_module,len_v,width)
     plt.bar(np.arange(len_v),s_cFosmRNA[0,sort_idx],
             width=width,color='b',align='center',label='EGF')
     plt.bar(np.arange(len_v)+width,s_cFosmRNA[1,sort_idx],
@@ -52,8 +77,7 @@ def visualize_sensitivity():
     plt.rcParams['mathtext.it'] = 'Arial:italic'
     plt.rcParams['axes.linewidth'] = 1
     
-    sort_idx, reaction_number = set_reaction_module(len_v,width)
-
+    draw_vertical_span(reaction_module,len_v,width)
     plt.bar(np.arange(len_v),s_PcFos[0,sort_idx],
             width=width,color='b',align='center',label='EGF')
     plt.bar(np.arange(len_v)+width,s_PcFos[1,sort_idx],
