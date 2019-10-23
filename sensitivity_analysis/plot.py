@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from .reaction_module import set_reaction_module
 from .sensitivity import analyze_sensitivity
 
-def draw_vertical_span(reaction_module,num_reactions,width):
+def draw_vertical_span(reaction_module,num_reaction,width):
     left_end = 0
     for i,nth_module in enumerate(reaction_module):
         if i%2 == 0:
@@ -17,13 +17,13 @@ def draw_vertical_span(reaction_module,num_reactions,width):
     ###
 
 def visualize_sensitivity():
-    num_reactions = 57 # Num. of Rate Equations
+    num_reaction = 57 # Num. of Rate Equations
     width = 0.3
     
     (s_cFosmRNA, s_PcFos) = analyze_sensitivity()
     reaction_module = set_reaction_module()
     
-    sort_idx = [0]*num_reactions
+    sort_idx = [0]*num_reaction
     left_end = 0
     for i,nth_module in enumerate(reaction_module):
         for j,k in enumerate(nth_module):
@@ -42,10 +42,10 @@ def visualize_sensitivity():
     plt.rcParams['mathtext.it'] = 'Arial:italic'
     plt.rcParams['axes.linewidth'] = 1
 
-    draw_vertical_span(reaction_module,num_reactions,width)
-    plt.bar(np.arange(num_reactions),s_cFosmRNA[0,sort_idx],
+    draw_vertical_span(reaction_module,num_reaction,width)
+    plt.bar(np.arange(num_reaction),s_cFosmRNA[0,sort_idx],
             width=width,color='b',align='center',label='EGF')
-    plt.bar(np.arange(num_reactions)+width,s_cFosmRNA[1,sort_idx],
+    plt.bar(np.arange(num_reaction)+width,s_cFosmRNA[1,sort_idx],
             width=width,color='r',align='center',label='HRG')
 
     for i,j in enumerate(sort_idx):
@@ -61,7 +61,7 @@ def visualize_sensitivity():
 
     plt.xticks([])
     plt.ylabel('Control coefficients on\nduration ('+r'$\it{c}$'+'-'+r'$\it{fos}$'+' mRNA)')
-    plt.xlim(-width,num_reactions-1-width)
+    plt.xlim(-width,num_reaction-1-width)
     plt.ylim(-1.2,0.6)
     plt.yticks([-1.2,-1.0,-0.8,-0.6,-0.4,-0.2,0,0.2,0.4,0.6])
     plt.legend(loc='lower right',frameon=False)
@@ -77,10 +77,10 @@ def visualize_sensitivity():
     plt.rcParams['mathtext.it'] = 'Arial:italic'
     plt.rcParams['axes.linewidth'] = 1
     
-    draw_vertical_span(reaction_module,num_reactions,width)
-    plt.bar(np.arange(num_reactions),s_PcFos[0,sort_idx],
+    draw_vertical_span(reaction_module,num_reaction,width)
+    plt.bar(np.arange(num_reaction),s_PcFos[0,sort_idx],
             width=width,color='b',align='center',label='EGF')
-    plt.bar(np.arange(num_reactions)+width,s_PcFos[1,sort_idx],
+    plt.bar(np.arange(num_reaction)+width,s_PcFos[1,sort_idx],
             width=width,color='r',align='center',label='HRG')
 
     for i,j in enumerate(sort_idx):
@@ -96,7 +96,7 @@ def visualize_sensitivity():
 
     plt.xticks([])
     plt.ylabel('Control coefficients on\nintegrated response (pc-Fos)')
-    plt.xlim(-width,num_reactions-1-width)
+    plt.xlim(-width,num_reaction-1-width)
     plt.ylim(-3,2)
     plt.legend(loc='lower right',frameon=False)
 
