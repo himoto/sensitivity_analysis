@@ -6,14 +6,14 @@ from .sensitivity import analyze_sensitivity
 
 def draw_vertical_span(reaction_module,num_reaction,width):
     left_end = 0
-    for i,nth_module in enumerate(reaction_module):
+    for i,ith_module in enumerate(reaction_module):
         if i%2 == 0:
             plt.axvspan(
                 left_end-width,
-                left_end+len(nth_module)-width,
+                left_end+len(ith_module)-width,
                 facecolor='k',alpha=0.1
             )
-        left_end += len(nth_module)
+        left_end += len(ith_module)
     ###
 
 def visualize_sensitivity():
@@ -25,8 +25,8 @@ def visualize_sensitivity():
     
     sort_idx = [0]*num_reaction
     left_end = 0
-    for i,nth_module in enumerate(reaction_module):
-        for j,k in enumerate(nth_module):
+    for i,ith_module in enumerate(reaction_module):
+        for j,k in enumerate(ith_module):
             if i!=0 and j==0:
                 left_end += len(reaction_module[i-1])
             sort_idx[left_end+j] = k
