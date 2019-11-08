@@ -82,8 +82,8 @@ def diffeq(t,y,x):
     v[55] = x[C.p55] * y[V.pDUSPn_pERKn]
     v[56] = x[C.p56] * y[V.pDUSPn] * y[V.ERKn] - x[C.m56] * y[V.pDUSPn_ERKn]
 
-    for i in range(len(v)):
-        v[i] = v[i]*perturbation[i]
+    for i,original in enumerate(v):
+        v[i] = original*perturbation[i]
 
 
     dydt = [0]*V.len_f_vars
