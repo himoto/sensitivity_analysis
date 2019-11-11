@@ -1,13 +1,30 @@
 import sys
 import numpy as np
-from scipy.integrate import simps
+from scipy.integrate import ode, simps
 
 from .model.name2idx import f_parameter as C
 from .model.name2idx import f_variable as V
 from .model import differential_equation as de
 from .model.param_const import f_params
 from .model.initial_condition import initial_values
-from .ode_solver import solveode
+
+
+def solveode(diffeq,y0,tspan,args):
+    sol = ode(diffeq)
+    sol.set_integrator('vode',method='bdf',with_jacobian=True)
+    sol.set_initial_value(y0,tspan[0])
+    sol.set_f_params(args)
+
+    T = [tspan[0]]
+    Y = [y0]
+
+    while sol.successful() and sol.t < tspan[-1]:
+        sol.integrate(sol.t+1.)
+        T.append(sol.t)
+        Y.append(sol.y)
+
+    return np.array(T),np.array(Y)
+
 
 # Calculation of the duration as the time it takes to decline below 10% of its maximum
 def get_duration(time_course_vector):
