@@ -45,9 +45,9 @@ def visualize_sensitivity():
     draw_vertical_span(reaction_module,num_reaction,width)
     plt.hlines([0],-width,num_reaction-1-width,'k',lw=1)
     plt.bar(np.arange(num_reaction),s_cFosmRNA[0,sort_idx],
-            width=width,color='b',align='center',label='EGF')
+            width=width,color='mediumblue',align='center',label='EGF')
     plt.bar(np.arange(num_reaction)+width,s_cFosmRNA[1,sort_idx],
-            width=width,color='r',align='center',label='HRG')
+            width=width,color='red',align='center',label='HRG')
 
     for i,j in enumerate(sort_idx):
         if j != 0:
@@ -81,9 +81,9 @@ def visualize_sensitivity():
     draw_vertical_span(reaction_module,num_reaction,width)
     plt.hlines([0],-width,num_reaction-1-width,'k',lw=1)
     plt.bar(np.arange(num_reaction),s_PcFos[0,sort_idx],
-            width=width,color='b',align='center',label='EGF')
+            width=width,color='mediumblue',align='center',label='EGF')
     plt.bar(np.arange(num_reaction)+width,s_PcFos[1,sort_idx],
-            width=width,color='r',align='center',label='HRG')
+            width=width,color='red',align='center',label='HRG')
 
     for i,j in enumerate(sort_idx):
         if j != 0:
