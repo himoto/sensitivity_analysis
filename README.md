@@ -4,7 +4,7 @@ Sensitivity analysis examines how perturbations to the processes in the model af
 ![sensitivity_cFosmRNA](images/sensitivity_cFosmRNA.png)
 ![sensitivity_PcFos](images/sensitivity_PcFos.png)
 
-Control coefficients for *c-fos* mRNA duration and integrated pc-Fos are shown by bars (blue, EGF; red, HRG).
+Control coefficients for *c-fos* mRNA duration and integrated pc-Fos are shown by bars (blue, EGF; red, HRG). Numbers above bars indicate the reaction indices.
 
 ## Description
 The single parameter sensitivity of each reaction is defined by<br>
