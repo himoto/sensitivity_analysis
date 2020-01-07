@@ -4,7 +4,7 @@ from scipy.integrate import ode, simps
 
 from .model.name2idx import parameters as C
 from .model.name2idx import variables as V
-from .model import differential_equation as de
+from .model import differential_equation as ode
 from .model.param_const import f_params
 from .model.initial_condition import initial_values
 
@@ -52,8 +52,8 @@ def analyze_sensitivity(num_reaction):
     integ_PcFos = np.empty((condition, num_reaction))
 
     for j in range(num_reaction):
-        de.perturbation = [1]*num_reaction
-        de.perturbation[j] = rate
+        ode.perturbation = [1]*num_reaction
+        ode.perturbation[j] = rate
 
         for i in range(condition):
             if i == 0:
@@ -62,7 +62,7 @@ def analyze_sensitivity(num_reaction):
             elif i == 1:
                 y0[V.EGF] = 0.0
                 y0[V.HRG] = 10.0
-            (T, Y) = solveode(de.diffeq, y0, tspan, tuple(x))
+            (T, Y) = solveode(ode.diffeq, y0, tspan, tuple(x))
 
             cFosmRNA = Y[:, V.cfosmRNAc]
             PcFos = Y[:, V.pcFOSn]*(x[C.Vn]/x[C.Vc]) + Y[:, V.pcFOSc]
@@ -74,7 +74,7 @@ def analyze_sensitivity(num_reaction):
 
     # Sensitivity coefficient
     s_cFosmRNA = np.log(duration_cFosmRNA /
-                        duration_cFosmRNA[:, 0][:, None])/np.log(rate)
-    s_PcFos = np.log(integ_PcFos/integ_PcFos[:, 0][:, None])/np.log(rate)
+                        duration_cFosmRNA[:, 0][:, None]) / np.log(rate)
+    s_PcFos = np.log(integ_PcFos / integ_PcFos[:, 0][:, None]) / np.log(rate)
 
     return s_cFosmRNA, s_PcFos
