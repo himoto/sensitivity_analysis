@@ -4,7 +4,7 @@ from scipy.integrate import ode, simps
 
 from .model.name2idx import parameters as C
 from .model.name2idx import variables as V
-from .model import differential_equation as ode
+from .model import differential_equation as ode_
 from .model.param_const import f_params
 from .model.initial_condition import initial_values
 
@@ -22,6 +22,23 @@ def solveode(diffeq, y0, tspan, args):
         Y.append(sol.y)
 
     return np.array(T), np.array(Y)
+
+
+def get_steady_state(diffeq, y0, tspan, args, steady_state_time=7200):
+    sol = ode(diffeq)
+    sol.set_integrator('vode', method='bdf', with_jacobian=True)
+    sol.set_initial_value(y0, tspan[0])
+    sol.set_f_params(args)
+
+    T = [tspan[0]]
+    Y = [y0]
+
+    while sol.successful() and sol.t < steady_state_time:
+        sol.integrate(steady_state_time, step=True)
+        T.append(sol.t)
+        Y.append(sol.y)
+
+    return T[-1], Y[-1]
 
 
 # Calculation of the duration as the time it takes to decline below 10% of its maximum
@@ -52,9 +69,18 @@ def analyze_sensitivity(num_reaction):
     integ_PcFos = np.empty((condition, num_reaction))
 
     for j in range(num_reaction):
-        ode.perturbation = [1]*num_reaction
-        ode.perturbation[j] = rate
-
+        ode_.perturbation = [1]*num_reaction
+        ode_.perturbation[j] = rate
+        # get steady state -- preprocess
+        y0[V.EGF] = 0.0
+        y0[V.HRG] = 0.0
+        (T_steady_state, Y_steady_state) = \
+            get_steady_state(ode_.diffeq, y0, tspan, tuple(x))
+        if T_steady_state < tspan[-1]:
+            print('Simulation failed.')
+        else:
+            y0 = Y_steady_state[:]
+        # add ligand
         for i in range(condition):
             if i == 0:
                 y0[V.EGF] = 10.0
@@ -62,7 +88,7 @@ def analyze_sensitivity(num_reaction):
             elif i == 1:
                 y0[V.EGF] = 0.0
                 y0[V.HRG] = 10.0
-            (T, Y) = solveode(ode.diffeq, y0, tspan, tuple(x))
+            (T, Y) = solveode(ode_.diffeq, y0, tspan, tuple(x))
 
             cFosmRNA = Y[:, V.cfosmRNAc]
             PcFos = Y[:, V.pcFOSn]*(x[C.Vn]/x[C.Vc]) + Y[:, V.pcFOSc]
