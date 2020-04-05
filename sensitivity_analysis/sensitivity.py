@@ -7,49 +7,30 @@ from .model.name2idx import variables as V
 from .model import differential_equation as ode_
 from .model.param_const import f_params
 from .model.initial_condition import initial_values
+from .simulation import solveode, get_steady_state
 
 
-def solveode(diffeq, y0, tspan, args):
-    sol = ode(diffeq)
-    sol.set_integrator('vode', method='bdf', with_jacobian=True)
-    sol.set_initial_value(y0, tspan[0])
-    sol.set_f_params(args)
-    T = [tspan[0]]
-    Y = [y0]
-    while sol.successful() and sol.t < tspan[-1]:
-        sol.integrate(sol.t+1.)
-        T.append(sol.t)
-        Y.append(sol.y)
+def get_duration(temporal_dynamics):
+    """
+    Calculation of the duration as the time it takes to decline below 10% of its maximum.
 
-    return np.array(T), np.array(Y)
+    Parameters
+    ----------
+    temporal_dynamics: array
+        Simulated time course data
+    
+    Returns
+    -------
+    duration: int
 
+    """
+    maximum_value = np.max(temporal_dynamics)
+    t_max = np.argmax(temporal_dynamics)
 
-def get_steady_state(diffeq, y0, tspan, args, steady_state_time=7200):
-    sol = ode(diffeq)
-    sol.set_integrator('vode', method='bdf', with_jacobian=True)
-    sol.set_initial_value(y0, tspan[0])
-    sol.set_f_params(args)
+    temporal_dynamics = temporal_dynamics - 0.1*maximum_value
+    temporal_dynamics[temporal_dynamics > 0.0] = -np.inf
 
-    T = [tspan[0]]
-    Y = [y0]
-
-    while sol.successful() and sol.t < steady_state_time:
-        sol.integrate(steady_state_time, step=True)
-        T.append(sol.t)
-        Y.append(sol.y)
-
-    return T[-1], Y[-1]
-
-
-# Calculation of the duration as the time it takes to decline below 10% of its maximum
-def get_duration(time_course_vector):
-    maximum_value = np.max(time_course_vector)
-    t_max = np.argmax(time_course_vector)
-
-    time_course_vector = time_course_vector - 0.1*maximum_value
-    time_course_vector[time_course_vector > 0.0] = -np.inf
-
-    duration = np.argmax(time_course_vector[t_max:]) + t_max
+    duration = np.argmax(temporal_dynamics[t_max:]) + t_max
 
     return duration
 
@@ -59,14 +40,14 @@ def analyze_sensitivity(num_reaction):
     x = f_params()
     y0 = initial_values()
 
-    condition = 2  # EGF & HRG
+    conditions = ['EGF', 'HRG']
     tspan = range(5401)  # -> 90 min.
 
     rate = 1.01  # 1% change
 
     # Signaling metric
-    duration_cFosmRNA = np.empty((condition, num_reaction))
-    integ_PcFos = np.empty((condition, num_reaction))
+    duration_cFosmRNA = np.empty((len(conditions), num_reaction))
+    integ_PcFos = np.empty((len(conditions), num_reaction))
 
     for j in range(num_reaction):
         ode_.perturbation = [1]*num_reaction
@@ -74,18 +55,19 @@ def analyze_sensitivity(num_reaction):
         # get steady state -- preprocess
         y0[V.EGF] = 0.0
         y0[V.HRG] = 0.0
-        (T_steady_state, Y_steady_state) = \
-            get_steady_state(ode_.diffeq, y0, tspan, tuple(x))
+        (T_steady_state, Y_steady_state) = get_steady_state(
+            ode_.diffeq, y0, tspan, tuple(x)
+        )
         if T_steady_state < tspan[-1]:
             print('Simulation failed.')
         else:
             y0 = Y_steady_state[:]
         # add ligand
-        for i in range(condition):
-            if i == 0:
+        for i, condition in enumerate(conditions):
+            if condition == 'EGF':
                 y0[V.EGF] = 10.0
                 y0[V.HRG] = 0.0
-            elif i == 1:
+            elif condition == 'HRG':
                 y0[V.EGF] = 0.0
                 y0[V.HRG] = 10.0
             (T, Y) = solveode(ode_.diffeq, y0, tspan, tuple(x))
@@ -99,8 +81,7 @@ def analyze_sensitivity(num_reaction):
             sys.stdout.write('\r%d/%d' % (1+j, num_reaction))
 
     # Sensitivity coefficient
-    s_cFosmRNA = np.log(duration_cFosmRNA /
-                        duration_cFosmRNA[:, 0][:, None]) / np.log(rate)
+    s_cFosmRNA = np.log(duration_cFosmRNA /duration_cFosmRNA[:, 0][:, None]) / np.log(rate)
     s_PcFos = np.log(integ_PcFos / integ_PcFos[:, 0][:, None]) / np.log(rate)
 
     return s_cFosmRNA, s_PcFos
