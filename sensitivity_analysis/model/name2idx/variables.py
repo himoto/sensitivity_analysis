@@ -1,4 +1,4 @@
-var_names = [\
+var_names = [
     'EGF',
     'HRG',
     'RsD',
@@ -45,9 +45,13 @@ var_names = [\
     'PreduspmRNAn',
     'cfosmRNAc',
     'duspmRNAc',
-    #
-    'len_f_vars'\
 ]
 
-for idx,name in enumerate(var_names):
-    exec('%s=%d'%(name,idx))
+for idx, name in enumerate(var_names):
+    exec(
+        '{} = {:d}'.format(
+            name, idx
+        )
+    )
+
+len_f_vars = len(var_names)

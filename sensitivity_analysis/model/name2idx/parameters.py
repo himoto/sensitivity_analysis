@@ -1,7 +1,6 @@
 # Table S4A. Good fitting parameter sets for the initial mechanistic models.
 # 7
-
-param_names = [\
+param_names = [
     'l1',
     'Lm1',
     'l2',
@@ -145,9 +144,13 @@ param_names = [\
     'a',
     'Vn',
     'Vc',
-    ##
-    'len_f_params'\
 ]
 
-for idx,name in enumerate(param_names):
-    exec('%s=%d'%(name,idx))
+for idx, name in enumerate(param_names):
+    exec(
+        '{} = {:d}'.format(
+            name, idx
+        )
+    )
+
+len_f_params = len(param_names)
