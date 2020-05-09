@@ -1,5 +1,5 @@
-from simulation import Simulation
-import plot_func
+from .simulation import Simulation
+from . import plot_func
 
 def run_simulation():
     sim = Simulation()
