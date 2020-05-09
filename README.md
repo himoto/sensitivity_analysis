@@ -22,9 +22,9 @@ where *v<sub>i</sub>* is the *i*<sup>th</sup> reaction rate, **v** is reaction v
 
 ## Usage
 ```python
-from sensitivity_analysis import visualize_sensitivity
+from sensitivity_analysis import analyze
 
-visualize_sensitivity()
+analyze()
 ```
 
 ## Installation
