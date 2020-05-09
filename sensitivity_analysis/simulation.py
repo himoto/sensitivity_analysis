@@ -1,17 +1,13 @@
 import numpy as np
 from scipy.integrate import ode
 
-from .model.name2idx import parameters as C
-from .model.name2idx import variables as V
-from .model.param_const import f_params
-from .model.initial_condition import initial_values
-from .model.differential_equation import diffeq
+from .model.set_model import *
 
 
 def solveode(diffeq, y0, tspan, args):
     sol = ode(diffeq)
     sol.set_integrator(
-        'vode', method='bdf', min_step=1e-8, with_jacobian=True
+        'vode', method='bdf', with_jacobian=True, min_step=1e-8
     )
     sol.set_initial_value(y0, tspan[0])
     sol.set_f_params(args)
@@ -30,7 +26,7 @@ def solveode(diffeq, y0, tspan, args):
 def get_steady_state(diffeq, y0, tspan, args, steady_state_time=7200):
     sol = ode(diffeq)
     sol.set_integrator(
-        'vode', method='bdf', min_step=1e-8, with_jacobian=True
+        'vode', method='bdf', with_jacobian=True, min_step=1e-8
     )
     sol.set_initial_value(y0, tspan[0])
     sol.set_f_params(args)
@@ -40,6 +36,7 @@ def get_steady_state(diffeq, y0, tspan, args, steady_state_time=7200):
 
     while sol.successful() and sol.t < steady_state_time:
         sol.integrate(steady_state_time, step=True)
+        
         T.append(sol.t)
         Y.append(sol.y)
 
@@ -49,18 +46,18 @@ def get_steady_state(diffeq, y0, tspan, args, steady_state_time=7200):
 class Simulation(object):
 
     tspan = range(5401)  # Unit time: 1 sec.
-    condition = 2
+    conditions = ['EGF', 'HRG']
 
     t = np.array(tspan)/60.  # sec. -> min. (plot_func.py)
 
-    PMEK_cyt = np.empty((len(tspan), condition))
-    PERK_cyt = np.empty((len(tspan), condition))
-    PRSK_wcl = np.empty((len(tspan), condition))
-    PCREB_wcl = np.empty((len(tspan), condition))
-    DUSPmRNA = np.empty((len(tspan), condition))
-    cFosmRNA = np.empty((len(tspan), condition))
-    cFosPro = np.empty((len(tspan), condition))
-    PcFos = np.empty((len(tspan), condition))
+    PMEK_cyt = np.empty((len(tspan), len(conditions)))
+    PERK_cyt = np.empty((len(tspan), len(conditions)))
+    PRSK_wcl = np.empty((len(tspan), len(conditions)))
+    PCREB_wcl = np.empty((len(tspan), len(conditions)))
+    DUSPmRNA = np.empty((len(tspan), len(conditions)))
+    cFosmRNA = np.empty((len(tspan), len(conditions)))
+    cFosPro = np.empty((len(tspan), len(conditions)))
+    PcFos = np.empty((len(tspan), len(conditions)))
 
     x = f_params()
     y0 = initial_values()
@@ -69,16 +66,13 @@ class Simulation(object):
     y0[V.EGF] = 0.0
     y0[V.HRG] = 0.0
     (T_steady_state, Y_steady_state) = get_steady_state(diffeq, y0, tspan, tuple(x))
-    if T_steady_state < tspan[-1]:
-        print('Simulation failed.')
-    else:
-        y0 = Y_steady_state[:]
+    y0 = Y_steady_state[:]
     # add ligand
-    for i in range(condition):
-        if i == 0:
+    for i, condition in enumerate(conditions):
+        if condition == 'EGF':
             y0[V.EGF] = 10.0
             y0[V.HRG] = 0.0
-        elif i == 1:
+        elif condition == 'HRG':
             y0[V.EGF] = 0.0
             y0[V.HRG] = 10.0
 
