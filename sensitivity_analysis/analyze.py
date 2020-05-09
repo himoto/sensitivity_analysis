@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from .sensitivity import analyze_sensitivity
+from .sensitivity import calc_sensitivity_coefficients
 from .reaction import *
 
 
@@ -17,11 +17,20 @@ def draw_vertical_span(reaction_module, num_reaction, width):
         left_end += len(ith_module)
 
 
-def visualize_sensitivity():
+def set_rc_params():
+    plt.figure(figsize=(12, 5))
+    plt.rcParams['font.size'] = 15
+    plt.rcParams['font.family'] = 'Arial'
+    plt.rcParams['mathtext.fontset'] = 'custom'
+    plt.rcParams['mathtext.it'] = 'Arial:italic'
+    plt.rcParams['axes.linewidth'] = 1
+
+
+def analyze():
     num_reaction = 57  # Num. of Rate Equations
     width = 0.3
 
-    (s_cFosmRNA, s_PcFos) = analyze_sensitivity(num_reaction)
+    (s_cFosmRNA, s_PcFos) = calc_sensitivity_coefficients(num_reaction)
     reaction_module = get_reaction_module()
 
     sort_idx = [0]*num_reaction
@@ -36,12 +45,7 @@ def visualize_sensitivity():
 
     # --------------------------------------------------------------------------
 
-    plt.figure(figsize=(12, 5))
-    plt.rcParams['font.size'] = 15
-    plt.rcParams['font.family'] = 'Arial'
-    plt.rcParams['mathtext.fontset'] = 'custom'
-    plt.rcParams['mathtext.it'] = 'Arial:italic'
-    plt.rcParams['axes.linewidth'] = 1
+    set_rc_params()
 
     draw_vertical_span(reaction_module, num_reaction, width)
     plt.hlines([0], -width, num_reaction-1-width, 'k', lw=1)
@@ -81,12 +85,7 @@ def visualize_sensitivity():
 
     # --------------------------------------------------------------------------
 
-    plt.figure(figsize=(12, 5))
-    plt.rcParams['font.size'] = 15
-    plt.rcParams['font.family'] = 'Arial'
-    plt.rcParams['mathtext.fontset'] = 'custom'
-    plt.rcParams['mathtext.it'] = 'Arial:italic'
-    plt.rcParams['axes.linewidth'] = 1
+    set_rc_params()
 
     draw_vertical_span(reaction_module, num_reaction, width)
     plt.hlines([0], -width, num_reaction-1-width, 'k', lw=1)
@@ -120,3 +119,7 @@ def visualize_sensitivity():
 
     plt.savefig('sensitivity_PcFos.png', dpi=300, bbox_inches='tight')
     plt.close()
+
+
+if __name__ == '__main__':
+    analyze()
