@@ -31,7 +31,7 @@ def _get_duration(temporal_dynamics):
     return duration
 
 
-def calc_sensitivity_coefficients(num_reaction):
+def calc_sensitivity_coefficients(n_reaction):
 
     x = f_params()
     y0 = initial_values()
@@ -42,11 +42,11 @@ def calc_sensitivity_coefficients(num_reaction):
     rate = 1.01  # 1% change
 
     # Signaling metric
-    duration_cFosmRNA = np.empty((len(conditions), num_reaction))
-    integ_PcFos = np.empty((len(conditions), num_reaction))
+    duration_cFosmRNA = np.empty((len(conditions), n_reaction))
+    integ_PcFos = np.empty((len(conditions), n_reaction))
 
-    for j in range(num_reaction):
-        set_model.perturbation = [1] * num_reaction
+    for j in range(n_reaction):
+        set_model.perturbation = [1] * n_reaction
         set_model.perturbation[j] = rate
         # get steady state -- preprocess
         y0[V.EGF] = 0.0
@@ -74,10 +74,15 @@ def calc_sensitivity_coefficients(num_reaction):
             duration_cFosmRNA[i, j] = _get_duration(cFosmRNA)
             integ_PcFos[i, j] = simps(PcFos)
 
-            sys.stdout.write('\r%d/%d' % (1+j, num_reaction))
+            sys.stdout.write('\r%d/%d' % (1+j, n_reaction))
 
     # Sensitivity coefficient
-    s_cFosmRNA = np.log(duration_cFosmRNA /duration_cFosmRNA[:, 0][:, None]) / np.log(rate)
-    s_PcFos = np.log(integ_PcFos / integ_PcFos[:, 0][:, None]) / np.log(rate)
+    s_cFosmRNA = np.log(
+        duration_cFosmRNA /duration_cFosmRNA[:, 0][:, None]
+    ) / np.log(rate)
+    
+    s_PcFos = np.log(
+        integ_PcFos / integ_PcFos[:, 0][:, None]
+    ) / np.log(rate)
 
     return s_cFosmRNA, s_PcFos
