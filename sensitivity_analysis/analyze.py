@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from .sensitivity import calc_sensitivity_coefficients
-from .reaction_network import rxn2proc
+from .reaction_network import ReactionNetwork
 
 
 def draw_vertical_span(biological_processes, n_reaction, width):
@@ -27,11 +27,16 @@ def set_rc_params():
 
 
 def analyze():
-    biological_processes, n_reaction, sort_idx = rxn2proc()
+    rxn = ReactionNetwork()
+    biological_processes = rxn.group()
+    n_reaction = 1
+    for reactions_in_process in biological_processes:
+        n_reaction += len(reactions_in_process)
+    sort_idx = [0] * n_reaction
+    sort_idx[:-1] = np.sum(biological_processes, axis=0)
+    reaction_indices = [str(i) for i in sort_idx]
 
     s_cFosmRNA, s_PcFos = calc_sensitivity_coefficients(n_reaction)
-
-    reaction_indices = [str(i) for i in sort_idx]
 
     width = 0.3
 
