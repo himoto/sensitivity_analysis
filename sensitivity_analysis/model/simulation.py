@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.integrate import ode
 
-from .model.set_model import *
+from .name2idx import C, V
+from .set_model import diffeq, param_values, initial_values
 
 
 def solveode(diffeq, y0, tspan, args):
@@ -59,7 +60,7 @@ class Simulation(object):
     cFosPro = np.empty((len(tspan), len(conditions)))
     PcFos = np.empty((len(tspan), len(conditions)))
 
-    x = f_params()
+    x = param_values()
     y0 = initial_values()
 
     # get steady state -- preprocess

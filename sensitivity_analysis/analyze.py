@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from .sensitivity import calc_sensitivity_coefficients
-from .reaction_network import ReactionNetwork
+from .model import ReactionNetwork
 
 
 def draw_vertical_span(biological_processes, n_reaction, width):

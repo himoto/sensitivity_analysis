@@ -2,8 +2,9 @@ import sys
 import numpy as np
 from scipy.integrate import ode, simps
 
-from .model import *
-from .simulation import solveode, get_steady_state
+from .model import (C, V, diffeq, param_values, initial_values,
+                    set_model, get_steady_state, solveode)
+
 
 
 def _get_duration(temporal_dynamics):
@@ -33,7 +34,7 @@ def _get_duration(temporal_dynamics):
 
 def calc_sensitivity_coefficients(n_reaction):
 
-    x = f_params()
+    x = param_values()
     y0 = initial_values()
 
     conditions = ['EGF', 'HRG']
