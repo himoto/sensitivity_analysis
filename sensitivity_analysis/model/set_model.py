@@ -85,7 +85,7 @@ def diffeq(t, y, x):
         for i, original in enumerate(v):
             v[i] = original * perturbation[i]
 
-    dydt = [0] * V.len_f_vars
+    dydt = [0] * V.NUM
 
     # Differential Equations for the Empirical Model of MEK Activation.
     dydt[V.A1] = -v0[1]+v0[2]
@@ -136,9 +136,9 @@ def diffeq(t, y, x):
     return dydt
 
 
-def f_params():
+def param_values():
 
-    x = [0] * C.len_f_params
+    x = [0] * C.NUM
 
     x[C.l1] = 1.81E-02
     x[C.Lm1] = 3.48E+03
@@ -277,7 +277,7 @@ def f_params():
 
 def initial_values():
 
-    y0 = [0] * V.len_f_vars
+    y0 = [0] * V.NUM
 
     y0[V.RsD] = 2.47e+2
     y0[V.Kin] = 8.27e+1
